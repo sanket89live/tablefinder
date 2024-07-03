@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wedding Reception Table Finder</title>
+    <style>
+        body {
+            font-family: 'Arial, sans-serif';
+            background: url('wedding-theme-background.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: #333;
+            text-align: center;
+            padding: 50px;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            display: inline-block;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            font-family: 'Georgia, serif';
+            color: #6b3a2b;
+        }
+        input[type="text"] {
+            padding: 10px;
+            margin: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #6b3a2b;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #8e5644;
+        }
+        .result {
+            margin-top: 20px;
+        }
+        .tableGuests {
+            margin-top: 20px;
+        }
+        .brideGroomPic {
+            width: 200px;
+            height: auto;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="bride_groom.jpg" alt="Bride and Groom" class="brideGroomPic">
+        <h1>Find Your Table</h1>
+        <form id="guestForm">
+            <input type="text" id="firstName" placeholder="First Name" required>
+            <input type="text" id="lastName" placeholder="Last Name" required>
+            <button type="submit">Find Table</button>
+        </form>
+        <div class="result" id="result"></div>
+        <div class="tableGuests" id="tableGuests"></div>
+    </div>
+
+    <script>
+        const guests = [
+            { firstName: "John", lastName: "Doe", table: 1 },
+            { firstName: "Jane", lastName: "Doe", table: 1 },
+            { firstName: "Alice", lastName: "Smith", table: 2 },
+            { firstName: "Bob", lastName: "Johnson", table: 3 },
+            // Add more guests here
+        ];
+
+        document.getElementById('guestForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const firstName = document.getElementById('firstName').value.trim();
+            const lastName = document.getElementById('lastName').value.trim();
+            const resultDiv = document.getElementById('result');
+            const tableGuestsDiv = document.getElementById('tableGuests');
+            resultDiv.innerHTML = '';
+            tableGuestsDiv.innerHTML = '';
+
+            const matches = guests.filter(guest =>
+                guest.firstName.toLowerCase() === firstName.toLowerCase() &&
+                guest.lastName.toLowerCase() === lastName.toLowerCase()
+            );
+
+            if (matches.length > 0) {
+                matches.forEach(match => {
+                    const para = document.createElement('p');
+                    para.textContent = `${match.firstName} ${match.lastName} is at table ${match.table}`;
+                    resultDiv.appendChild(para);
+
+                    displayTableGuests(match.table);
+                });
+            } else {
+                const para = document.createElement('p');
+                para.textContent = 'Guest not found. Please check the spelling or try again.';
+                resultDiv.appendChild(para);
+            }
+        });
+
+        function displayTableGuests(tableNumber) {
+            const tableGuestsDiv = document.getElementById('tableGuests');
+            const tableGuests = guests.filter(guest => guest.table === tableNumber);
+            
+            if (tableGuests.length > 0) {
+                const heading = document.createElement('h2');
+                heading.textContent = `Guests at Table ${tableNumber}:`;
+                tableGuestsDiv.appendChild(heading);
+
+                tableGuests.forEach(guest => {
+                    const guestPara = document.createElement('p');
+                    guestPara.textContent = `${guest.firstName} ${guest.lastName}`;
+                    tableGuestsDiv.appendChild(guestPara);
+                });
+            }
+        }
+    </script>
+</body>
+</html>
